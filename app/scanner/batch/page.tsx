@@ -11,7 +11,6 @@ import {
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { AuthGuard } from "@/components/auth-guard";
 
 type Status = "valid" | "error";
 
@@ -180,7 +179,6 @@ export default function BatchPage() {
   };
 
   return (
-    <AuthGuard>
     <div className="flex flex-col min-h-screen bg-gray-50">
       {/* Status bar */}
       <div className="h-11 bg-white" />
@@ -316,6 +314,5 @@ export default function BatchPage() {
         />
       </div>
     </div>
-    </AuthGuard>
   );
 }
