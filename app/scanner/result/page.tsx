@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { AuthGuard } from "@/components/auth-guard";
 
 const staticInfo = [
   { icon: Package,  label: "Tên sản phẩm",         value: "Gạo ST25 Hữu Cơ Sóc Trăng",                  color: "text-blue-600"   },
@@ -67,6 +68,7 @@ export default function ResultPage() {
   };
 
   return (
+    <AuthGuard>
     <div className="flex flex-col h-screen overflow-hidden bg-gray-50">
 
       {/* ── Top bar (status bar + header merged) ── */}
@@ -248,5 +250,6 @@ export default function ResultPage() {
       </div>
 
     </div>
+    </AuthGuard>
   );
 }

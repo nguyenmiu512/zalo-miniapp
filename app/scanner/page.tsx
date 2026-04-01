@@ -7,6 +7,7 @@ import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { QrViewfinder } from "@/components/qr-viewfinder";
 import { SuccessToast } from "@/components/success-toast";
 import { Flashlight, ImageIcon } from "lucide-react";
+import { AuthGuard } from "@/components/auth-guard";
 
 const TAB_ROUTES: Record<string, string> = {
   single: "/scanner/result",
@@ -146,8 +147,10 @@ function ScannerContent() {
 
 export default function ScannerPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-white" />}>
-      <ScannerContent />
-    </Suspense>
+    <AuthGuard>
+      <Suspense fallback={<div className="min-h-screen bg-white" />}>
+        <ScannerContent />
+      </Suspense>
+    </AuthGuard>
   );
 }
