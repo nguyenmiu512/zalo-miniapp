@@ -1,13 +1,16 @@
 import type { NextConfig } from "next";
 
-const isProd = process.env.NODE_ENV === "production";
+// GitHub Actions sets GITHUB_ACTIONS=true automatically
+const isGithubPages = process.env.GITHUB_ACTIONS === "true";
 
 const nextConfig: NextConfig = {
-  output: "export",
-  trailingSlash: true,
-  images: { unoptimized: true },
-  basePath: isProd ? "/zalo-miniapp" : "",
-  assetPrefix: isProd ? "/zalo-miniapp/" : "",
+  ...(isGithubPages && {
+    output: "export",
+    trailingSlash: true,
+    images: { unoptimized: true },
+    basePath: "/zalo-miniapp",
+    assetPrefix: "/zalo-miniapp/",
+  }),
 };
 
 export default nextConfig;
