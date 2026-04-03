@@ -68,7 +68,7 @@ export function SuccessToast({ toasts, onDismiss, duration = 5000 }: ToastStackP
                     onClick={() => onDismiss(toast.id)}
                     className={`shrink-0 ml-2 px-3 py-1.5 rounded-lg ${accent} ${accentHover} text-white text-xs font-semibold transition-colors whitespace-nowrap`}
                   >
-                    OK
+                    {isError ? "Huỷ" : "OK"}
                   </button>
                 )}
               </div>

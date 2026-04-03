@@ -19,6 +19,11 @@ const USE_CASES = [
     label: "Quét và xác nhận thông tin",
     desc: "Scan xong → màn hình xác nhận → toast",
   },
+  {
+    id: "fail",
+    label: "Quét thất bại",
+    desc: "Scan xong → toast lỗi + lưu vào Nháp",
+  },
 ];
 
 // Mock product for simulation
@@ -34,7 +39,7 @@ function ScannerContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { addToast } = useToast();
-  const { addSuccess } = useHistory();
+  const { addSuccess, addDraft } = useHistory();
   const [useCase, setUseCase] = useState("quick");
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -65,6 +70,9 @@ function ScannerContent() {
     if (useCase === "quick") {
       addToast(`Ghi thông tin sản phẩm ${MOCK_PRODUCT.name} thành công`);
       addSuccess(MOCK_PRODUCT);
+    } else if (useCase === "fail") {
+      addToast(`Quét thất bại: không nhận dạng được mã QR`, "error");
+      addDraft(MOCK_PRODUCT);
     } else {
       router.push("/scanner/result");
     }

@@ -33,6 +33,7 @@ const MOCK: HistoryRecord[] = [
 interface HistoryContextType {
   records: HistoryRecord[];
   addSuccess: (data: Omit<HistoryRecord, "id" | "timestamp" | "status">) => void;
+  addDraft: (data: Omit<HistoryRecord, "id" | "timestamp" | "status">) => void;
   syncRecord: (id: number) => void;
   syncAll: () => void;
   syncMultiple: (ids: number[]) => void;
@@ -47,6 +48,10 @@ export function HistoryProvider({ children }: { children: React.ReactNode }) {
     setRecords(prev => [{ ...data, id: mid(), timestamp: new Date(), status: "success" }, ...prev]);
   }, []);
 
+  const addDraft = useCallback((data: Omit<HistoryRecord, "id" | "timestamp" | "status">) => {
+    setRecords(prev => [{ ...data, id: mid(), timestamp: new Date(), status: "draft" }, ...prev]);
+  }, []);
+
   const syncRecord = useCallback((id: number) => {
     setRecords(prev => prev.map(r => r.id === id ? { ...r, status: "success", timestamp: new Date() } : r));
   }, []);
@@ -59,7 +64,7 @@ export function HistoryProvider({ children }: { children: React.ReactNode }) {
     setRecords(prev => prev.map(r => ids.includes(r.id) ? { ...r, status: "success", timestamp: new Date() } : r));
   }, []);
 
-  return <Ctx.Provider value={{ records, addSuccess, syncRecord, syncAll, syncMultiple }}>{children}</Ctx.Provider>;
+  return <Ctx.Provider value={{ records, addSuccess, addDraft, syncRecord, syncAll, syncMultiple }}>{children}</Ctx.Provider>;
 }
 
 export function useHistory() {
