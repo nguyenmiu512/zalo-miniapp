@@ -45,11 +45,8 @@ export default function LoginPage() {
 
       {/* Logo area */}
       <div className="flex flex-col items-center pt-12 pb-10 px-6">
-        <div className="w-16 h-16 rounded-2xl bg-blue-600 flex items-center justify-center shadow-lg mb-4">
-          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-            <path d="M8 8h8a6 6 0 010 12H8V8z" fill="white" opacity="0.9"/>
-            <rect x="8" y="22" width="4" height="4" rx="1" fill="white"/>
-          </svg>
+        <div className="w-16 h-16 rounded-2xl overflow-hidden shadow-lg mb-4">
+          <img src="/logo.svg" alt="PILA Logo" className="w-full h-full object-cover" />
         </div>
         <h1 className="text-2xl font-bold text-gray-900 tracking-tight">PILA</h1>
         <p className="text-sm text-gray-500 mt-1">Truy xuất nguồn gốc sản phẩm</p>
