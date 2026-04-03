@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronLeft, RotateCcw, X, CheckCircle2, FileX } from "lucide-react";
+import { ChevronLeft, RotateCcw, X, CheckCircle2, FileX, Undo2 } from "lucide-react";
 import { useHistory, type HistoryRecord } from "@/components/history-context";
 import { useToast } from "@/components/toast-context";
 
@@ -50,7 +50,14 @@ function RecordItem({ record, onClick }: { record: HistoryRecord; onClick: () =>
         {record.image}
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-[13px] font-semibold text-gray-900 truncate">{record.name}</p>
+        <div className="flex items-center gap-1.5 flex-wrap">
+          <p className="text-[13px] font-semibold text-gray-900 truncate">{record.name}</p>
+          {record.label && (
+            <span className="shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-purple-100 text-purple-700">
+              {record.label}
+            </span>
+          )}
+        </div>
         <p className="text-[11px] text-gray-400 font-mono mt-0.5">{record.sku}</p>
       </div>
       <span className="text-[11px] text-gray-400 shrink-0">{timeStr(record.timestamp)}</span>
@@ -63,10 +70,12 @@ function DetailSheet({
   record,
   onClose,
   onReRecord,
+  onRevoke,
 }: {
   record: HistoryRecord | null;
   onClose: () => void;
   onReRecord: (record: HistoryRecord) => void;
+  onRevoke: (record: HistoryRecord) => void;
 }) {
   const visible = record !== null;
   return (
@@ -110,23 +119,37 @@ function DetailSheet({
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-[11px] text-gray-400 font-medium uppercase tracking-wide">Trạng thái</span>
-                  {record.status === "success"
-                    ? <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-green-100 text-green-700">Thành công</span>
-                    : <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700">Nháp</span>
-                  }
+                  <div className="flex items-center gap-1.5">
+                    {record.label && (
+                      <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-purple-100 text-purple-700">{record.label}</span>
+                    )}
+                    {record.status === "success"
+                      ? <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-green-100 text-green-700">Thành công</span>
+                      : <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700">Nháp</span>
+                    }
+                  </div>
                 </div>
               </div>
             </div>
 
             <div className="px-5 pb-safe-5 pt-1">
               {record.status === "draft" ? (
-                <button
-                  onClick={() => { onReRecord(record); onClose(); }}
-                  className="w-full flex items-center justify-center gap-2 h-12 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-colors"
-                >
-                  <RotateCcw size={15} />
-                  Xác nhận lại
-                </button>
+                <div className="flex flex-col gap-2">
+                  <button
+                    onClick={() => { onReRecord(record); onClose(); }}
+                    className="w-full flex items-center justify-center gap-2 h-12 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-colors"
+                  >
+                    <RotateCcw size={15} />
+                    Xác nhận lại
+                  </button>
+                  <button
+                    onClick={() => { onRevoke(record); onClose(); }}
+                    className="w-full flex items-center justify-center gap-2 h-10 text-red-500 hover:text-red-600 text-sm font-semibold transition-colors"
+                  >
+                    <Undo2 size={15} />
+                    Thu hồi
+                  </button>
+                </div>
               ) : (
                 <div className="flex items-center justify-center gap-2 py-3 text-green-600 text-sm font-medium">
                   <CheckCircle2 size={16} />
@@ -144,7 +167,7 @@ function DetailSheet({
 // ── Main page ─────────────────────────────────────────────────────────────────
 export default function HistoryPage() {
   const router = useRouter();
-  const { records, syncRecord, syncMultiple } = useHistory();
+  const { records, syncRecord, syncMultiple, removeRecord, removeAll } = useHistory();
   const { addToast } = useToast();
 
   const [tab, setTab] = useState<"success" | "draft">("success");
@@ -164,6 +187,19 @@ export default function HistoryPage() {
     } else {
       addToast(`Xác nhận lại thất bại: ${record.name}`, "error");
     }
+  };
+
+  // Revoke single draft
+  const handleRevoke = (record: HistoryRecord) => {
+    removeRecord(record.id);
+    addToast(`Đã thu hồi: ${record.name}`, "success");
+  };
+
+  // Revoke all drafts
+  const handleRevokeAll = () => {
+    const ids = draftList.map(r => r.id);
+    removeAll(ids);
+    addToast(`Đã thu hồi ${ids.length} bản ghi`, "success");
   };
 
   // Re-record all drafts
@@ -243,16 +279,25 @@ export default function HistoryPage() {
         )}
       </div>
 
-      {/* Xác nhận lại (all) — Nháp tab only */}
+      {/* Bottom actions — Nháp tab only */}
       {tab === "draft" && draftList.length > 0 && (
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-4 pt-3 pb-safe-4 shadow-lg">
-          <button
-            onClick={handleReRecordAll}
-            className="w-full flex items-center justify-center gap-2 h-12 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-colors"
-          >
-            <RotateCcw size={16} />
-            Xác nhận lại
-          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={handleReRecordAll}
+              className="flex-1 flex items-center justify-center gap-2 h-12 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-colors"
+            >
+              <RotateCcw size={16} />
+              Xác nhận lại
+            </button>
+            <button
+              onClick={handleRevokeAll}
+              className="flex-1 flex items-center justify-center gap-2 h-12 text-red-500 hover:text-red-600 text-sm font-semibold transition-colors "
+            >
+              <Undo2 size={16} />
+              Thu hồi
+            </button>
+          </div>
         </div>
       )}
 
@@ -261,6 +306,7 @@ export default function HistoryPage() {
         record={selected}
         onClose={() => setSelected(null)}
         onReRecord={handleReRecord}
+        onRevoke={handleRevoke}
       />
     </div>
   );

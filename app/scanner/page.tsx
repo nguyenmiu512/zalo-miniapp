@@ -6,7 +6,7 @@ import Link from "next/link";
 import { QrViewfinder } from "@/components/qr-viewfinder";
 import { useToast } from "@/components/toast-context";
 import { useHistory } from "@/components/history-context";
-import { Flashlight, ImageIcon, ChevronDown, Check, Clock } from "lucide-react";
+import { Flashlight, ImageIcon, ChevronDown, Check, Clock, Link2, ScanLine } from "lucide-react";
 
 const USE_CASES = [
   {
@@ -23,6 +23,11 @@ const USE_CASES = [
     id: "fail",
     label: "Quét thất bại",
     desc: "Scan xong → toast lỗi + lưu vào Nháp",
+  },
+  {
+    id: "linked",
+    label: "Quét QR liên kết",
+    desc: "Quét QR gốc → popup yêu cầu quét nguyên liệu",
   },
 ];
 
@@ -42,6 +47,8 @@ function ScannerContent() {
   const { addSuccess, addDraft } = useHistory();
   const [useCase, setUseCase] = useState("quick");
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showLinkedPopup, setShowLinkedPopup] = useState(false);
+  const [linkedOutcome, setLinkedOutcome] = useState<"success" | "fail">("success");
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const selected = USE_CASES.find((c) => c.id === useCase)!;
@@ -75,6 +82,24 @@ function ScannerContent() {
       addDraft(MOCK_PRODUCT);
     } else {
       router.push("/scanner/result");
+    }
+  };
+
+  // Step 1 for linked: show popup after QR 1 success
+  const handleLinkedStep1 = (outcome: "success" | "fail") => {
+    setLinkedOutcome(outcome);
+    setShowLinkedPopup(true);
+  };
+
+  // Step 2 for linked: triggered by "Quét tiếp" in popup
+  const handleLinkedStep2 = () => {
+    setShowLinkedPopup(false);
+    if (linkedOutcome === "success") {
+      addToast(`Ghi thông tin sản phẩm ${MOCK_PRODUCT.name} thành công`);
+      addSuccess(MOCK_PRODUCT);
+    } else {
+      addToast(`Quét thất bại: không nhận dạng được mã QR`, "error");
+      addDraft(MOCK_PRODUCT);
     }
   };
 
@@ -166,16 +191,70 @@ function ScannerContent() {
           </button>
         </div>
 
-        {/* Simulate button */}
-        <div className="mt-2">
-          <button
-            onClick={handleSimulate}
-            className="flex w-full items-center justify-center rounded-xl bg-blue-600 py-3.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 active:scale-95 transition-transform"
-          >
-            Mô phỏng quét thành công →
-          </button>
-        </div>
+        {/* Simulate buttons */}
+        {useCase === "linked" ? (
+          <div className="mt-2 flex flex-col gap-2">
+            <button
+              onClick={() => handleLinkedStep1("success")}
+              className="flex w-full items-center justify-center rounded-xl bg-blue-600 py-3.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 active:scale-95 transition-transform"
+            >
+              Mô phỏng quét thành công →
+            </button>
+            <button
+              onClick={() => handleLinkedStep1("fail")}
+              className="flex w-full items-center justify-center rounded-xl border border-red-200 py-3.5 text-sm font-semibold text-red-500 hover:bg-red-50 active:scale-95 transition-transform"
+            >
+              Mô phỏng quét thất bại lần 2 →
+            </button>
+          </div>
+        ) : (
+          <div className="mt-2">
+            <button
+              onClick={handleSimulate}
+              className="flex w-full items-center justify-center rounded-xl bg-blue-600 py-3.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 active:scale-95 transition-transform"
+            >
+              Mô phỏng quét thành công →
+            </button>
+          </div>
+        )}
       </div>
+
+      {/* Linked QR popup */}
+      {showLinkedPopup && (
+        <>
+          <div
+            className="fixed inset-0 z-40 bg-black/50"
+            onClick={() => setShowLinkedPopup(false)}
+          />
+          <div className="fixed inset-0 z-50 flex items-center justify-center px-6">
+            <div className="w-full bg-white rounded-2xl shadow-2xl overflow-hidden">
+              {/* Icon header */}
+              <div className="flex flex-col items-center pt-6 pb-4 px-6 text-center">
+                <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center mb-3">
+                  <Link2 size={26} className="text-blue-600" />
+                </div>
+                <h2 className="text-[15px] font-bold text-gray-900 leading-snug mb-2">
+                  Cần quét thêm mã nguyên liệu
+                </h2>
+                <p className="text-[13px] text-gray-500 leading-relaxed">
+                  Cần quét thêm mã của từng nguyên liệu để đảm bảo thông tin chính xác và đầy đủ.
+                </p>
+              </div>
+
+              {/* Actions */}
+              <div className="px-5 pb-6 pt-2">
+                <button
+                  onClick={handleLinkedStep2}
+                  className="w-full flex items-center justify-center gap-2 h-12 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-colors"
+                >
+                  <ScanLine size={16} />
+                  Quét tiếp
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

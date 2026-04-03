@@ -11,6 +11,7 @@ export interface HistoryRecord {
   business: string;
   timestamp: Date;
   status: "success" | "draft";
+  label?: string;
 }
 
 let _id = 200;
@@ -28,12 +29,15 @@ const MOCK: HistoryRecord[] = [
   { id: mid(), name: "Dừa Tươi Bến Tre",               sku: "BT-COC-001-0034",     image: "🥥", imageBg: "bg-green-50",   business: "HTX Dừa Bến Tre",                     timestamp: ago(45*M),    status: "draft" },
   { id: mid(), name: "Muối Hồng Himalaya",              sku: "HIM-SALT-250G-0009",  image: "🧂", imageBg: "bg-pink-50",    business: "Công ty TNHH Muối Himalaya VN",       timestamp: ago(90*M),    status: "draft" },
   { id: mid(), name: "Trà Shan Tuyết Hà Giang",         sku: "HG-TEA-100G-0067",    image: "🍃", imageBg: "bg-emerald-50", business: "HTX Trà Cổ Thụ Hà Giang",             timestamp: ago(26*H),    status: "draft" },
+  { id: mid(), name: "Xuất ăn học đường",                sku: "XD-MEAL-COMBO-0091",  image: "🍱", imageBg: "bg-sky-50",     business: "Công ty TNHH Bếp Trường An",          timestamp: ago(15*M),    status: "draft", label: "nhiều nguồn" },
 ];
 
 interface HistoryContextType {
   records: HistoryRecord[];
   addSuccess: (data: Omit<HistoryRecord, "id" | "timestamp" | "status">) => void;
   addDraft: (data: Omit<HistoryRecord, "id" | "timestamp" | "status">) => void;
+  removeRecord: (id: number) => void;
+  removeAll: (ids: number[]) => void;
   syncRecord: (id: number) => void;
   syncAll: () => void;
   syncMultiple: (ids: number[]) => void;
@@ -56,6 +60,14 @@ export function HistoryProvider({ children }: { children: React.ReactNode }) {
     setRecords(prev => prev.map(r => r.id === id ? { ...r, status: "success", timestamp: new Date() } : r));
   }, []);
 
+  const removeRecord = useCallback((id: number) => {
+    setRecords(prev => prev.filter(r => r.id !== id));
+  }, []);
+
+  const removeAll = useCallback((ids: number[]) => {
+    setRecords(prev => prev.filter(r => !ids.includes(r.id)));
+  }, []);
+
   const syncAll = useCallback(() => {
     setRecords(prev => prev.map(r => r.status === "draft" ? { ...r, status: "success", timestamp: new Date() } : r));
   }, []);
@@ -64,7 +76,7 @@ export function HistoryProvider({ children }: { children: React.ReactNode }) {
     setRecords(prev => prev.map(r => ids.includes(r.id) ? { ...r, status: "success", timestamp: new Date() } : r));
   }, []);
 
-  return <Ctx.Provider value={{ records, addSuccess, addDraft, syncRecord, syncAll, syncMultiple }}>{children}</Ctx.Provider>;
+  return <Ctx.Provider value={{ records, addSuccess, addDraft, removeRecord, removeAll, syncRecord, syncAll, syncMultiple }}>{children}</Ctx.Provider>;
 }
 
 export function useHistory() {
