@@ -3,14 +3,14 @@
   "configurations": [
     {
       "name": "zalo-mini-app (dev)",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeExecutable": "/bin/bash",
+      "runtimeArgs": [".claude/start-dev.sh"],
       "port": 3000,
       "autoPort": true
     },
     {
       "name": "zalo-mini-app (production)",
-      "runtimeExecutable": "npm",
+      "runtimeExecutable": "/opt/homebrew/bin/npm",
       "runtimeArgs": ["run", "start"],
       "port": 3000,
       "autoPort": true

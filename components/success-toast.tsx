@@ -1,73 +1,91 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { CheckCircle2, X } from "lucide-react";
+import { CheckCircle2, XCircle } from "lucide-react";
 
-interface SuccessToastProps {
+export interface ToastItem {
+  id: number;
   message: string;
-  duration?: number; // ms
-  onDismiss: () => void;
+  type?: "success" | "error";
 }
 
-export function SuccessToast({ message, duration = 5000, onDismiss }: SuccessToastProps) {
-  const [visible, setVisible] = useState(false);
-  const [leaving, setLeaving] = useState(false);
+interface ToastStackProps {
+  toasts: ToastItem[];
+  onDismiss: (id: number) => void;
+  duration?: number;
+}
 
-  useEffect(() => {
-    // Trigger enter animation
-    const enterTimer = setTimeout(() => setVisible(true), 10);
+export function SuccessToast({ toasts, onDismiss, duration = 5000 }: ToastStackProps) {
+  if (toasts.length === 0) return null;
 
-    // Start leave animation before fully dismissing
-    const leaveTimer = setTimeout(() => setLeaving(true), duration - 400);
-
-    // Call onDismiss after full duration
-    const dismissTimer = setTimeout(() => onDismiss(), duration);
-
-    return () => {
-      clearTimeout(enterTimer);
-      clearTimeout(leaveTimer);
-      clearTimeout(dismissTimer);
-    };
-  }, [duration, onDismiss]);
-
-  const handleClose = () => {
-    setLeaving(true);
-    setTimeout(onDismiss, 350);
-  };
+  const visible = toasts.slice(-3);
+  const total = toasts.length;
 
   return (
-    <div
-      className={[
-        "fixed top-14 left-1/2 z-50 w-[calc(100%-32px)] max-w-[358px]",
-        "-translate-x-1/2 transition-all duration-350 ease-out",
-        visible && !leaving
-          ? "opacity-100 translate-y-0"
-          : "opacity-0 -translate-y-3 pointer-events-none",
-      ].join(" ")}
-    >
-      <div className="flex items-center gap-3 bg-gray-900 text-white rounded-2xl px-4 py-3.5 shadow-2xl">
-        <div className="shrink-0 bg-green-500 rounded-full p-1">
-          <CheckCircle2 size={14} className="text-white" />
-        </div>
-        <p className="flex-1 text-sm font-medium">{message}</p>
-        <button
-          onClick={handleClose}
-          className="shrink-0 text-gray-400 hover:text-white transition-colors p-0.5"
-        >
-          <X size={15} />
-        </button>
-      </div>
+    <>
+      {visible.map((toast, vi) => {
+        const depth = visible.length - 1 - vi;
+        const isTop = depth === 0;
+        const isError = toast.type === "error";
+        const accent = isError ? "bg-red-500" : "bg-green-500";
+        const accentHover = isError ? "hover:bg-red-400 active:bg-red-600" : "hover:bg-green-400 active:bg-green-600";
+        const bar = isError ? "bg-red-400" : "bg-green-400";
+        const Icon = isError ? XCircle : CheckCircle2;
 
-      {/* Progress bar */}
-      <div className="mx-2 h-0.5 bg-gray-700 rounded-full overflow-hidden mt-1">
-        <div
-          className="h-full bg-green-400 rounded-full origin-left"
-          style={{
-            animation: `shrink ${duration}ms linear forwards`,
-          }}
-        />
-      </div>
+        return (
+          <div
+            key={toast.id}
+            className="fixed left-1/2 w-[calc(100%-32px)] max-w-[358px]"
+            style={{
+              top: `${56 + depth * 10}px`,
+              transform: "translateX(-50%)",
+              zIndex: 50 + (visible.length - depth),
+            }}
+          >
+            <div
+              style={{
+                transform: `scale(${1 - depth * 0.04})`,
+                transformOrigin: "top center",
+                opacity: isTop ? 1 : depth === 1 ? 0.82 : 0.6,
+                transition: "transform 300ms ease-out, opacity 300ms ease-out",
+              }}
+            >
+              <div className={`flex items-center gap-3 text-white rounded-2xl px-4 py-3.5 shadow-2xl ${isTop ? "bg-gray-900" : "bg-gray-700"}`}>
+                <div className="relative shrink-0">
+                  <div className={`${accent} rounded-full p-1`}>
+                    <Icon size={14} className="text-white" />
+                  </div>
+                  {isTop && total > 1 && (
+                    <span className="absolute -top-2 -right-2 min-w-[18px] h-[18px] rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center px-1 leading-none">
+                      {total}
+                    </span>
+                  )}
+                </div>
 
-    </div>
+                <p className="flex-1 text-sm font-medium leading-snug">{toast.message}</p>
+
+                {isTop && (
+                  <button
+                    onClick={() => onDismiss(toast.id)}
+                    className={`shrink-0 ml-2 px-3 py-1.5 rounded-lg ${accent} ${accentHover} text-white text-xs font-semibold transition-colors whitespace-nowrap`}
+                  >
+                    OK
+                  </button>
+                )}
+              </div>
+
+              {isTop && (
+                <div className="mx-2 h-0.5 bg-gray-700 rounded-full overflow-hidden mt-1">
+                  <div
+                    key={toast.id}
+                    className={`h-full ${bar} rounded-full origin-left`}
+                    style={{ animation: `shrink ${duration}ms linear forwards` }}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      })}
+    </>
   );
 }
