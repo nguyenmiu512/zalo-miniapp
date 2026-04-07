@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { RotateCcw, X, CheckCircle2, FileX, Undo2, Trash2, MoreHorizontal } from "lucide-react";
+import { RotateCcw, X, CheckCircle2, FileX, Undo2, Trash2, MoreHorizontal, ClipboardList, FileClock } from "lucide-react";
 import { useHistory, type HistoryRecord } from "@/components/history-context";
 import { useToast } from "@/components/toast-context";
 import { useAuth } from "@/components/auth-context";
@@ -299,9 +299,28 @@ export default function HistoryPage() {
       {/* List */}
       <div className="flex-1 overflow-y-auto pb-4">
         {groups.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full gap-3 text-gray-400">
-            <FileX size={40} strokeWidth={1.5} />
-            <p className="text-sm font-medium">Chưa có dữ liệu</p>
+          <div className="flex flex-col items-center justify-center h-full gap-3 px-8 text-center">
+            {tab === "success" ? (
+              <>
+                <div className="w-16 h-16 rounded-2xl bg-green-50 flex items-center justify-center">
+                  <ClipboardList size={32} className="text-green-400" strokeWidth={1.5} />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-gray-700">Chưa có bản ghi thành công</p>
+                  <p className="text-xs text-gray-400 mt-1">Quét QR và xác nhận sản phẩm để bản ghi xuất hiện ở đây</p>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="w-16 h-16 rounded-2xl bg-amber-50 flex items-center justify-center">
+                  <FileClock size={32} className="text-amber-400" strokeWidth={1.5} />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-gray-700">Không có bản ghi nháp</p>
+                  <p className="text-xs text-gray-400 mt-1">Các lần quét thất bại sẽ được lưu vào đây để xác nhận lại</p>
+                </div>
+              </>
+            )}
           </div>
         ) : (
           groups.map(({ label, items }) => (
