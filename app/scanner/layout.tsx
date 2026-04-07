@@ -24,13 +24,15 @@ function BottomNav() {
   ] as const;
 
   return (
-    <div className="shrink-0 bg-white border-t border-gray-100 flex">
+    <div className="shrink-0 bg-white flex" style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}>
       {tabs.map(({ href, icon: Icon, label, active }) => (
         <Link
           key={href}
           href={href}
-          className={`flex-1 flex flex-col items-center gap-1 py-3 transition-colors ${
-            active ? "text-blue-600" : "text-gray-400 hover:text-gray-600"
+          className={`flex-1 flex flex-col items-center gap-1 pt-2 pb-3 border-t-2 transition-colors ${
+            active
+              ? "text-blue-600 border-blue-600"
+              : "text-gray-400 border-gray-100 hover:text-gray-600"
           }`}
         >
           <Icon size={22} strokeWidth={active ? 2.5 : 1.8} />
