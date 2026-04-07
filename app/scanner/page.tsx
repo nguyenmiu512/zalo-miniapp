@@ -6,7 +6,7 @@ import Link from "next/link";
 import { QrViewfinder } from "@/components/qr-viewfinder";
 import { useToast } from "@/components/toast-context";
 import { useHistory } from "@/components/history-context";
-import { Flashlight, ImageIcon, ChevronDown, Check, Link2, ScanLine, MoreHorizontal, X } from "lucide-react";
+import { ImageIcon, ChevronDown, Check, Link2, ScanLine, MoreHorizontal, X } from "lucide-react";
 import { useAuth } from "@/components/auth-context";
 
 const USE_CASES = [
@@ -188,16 +188,9 @@ function ScannerContent() {
           <QrViewfinder />
         </div>
 
-        {/* Flash / Library */}
+        {/* Library + hint */}
         <div className="flex justify-between items-start px-1">
-          <button className="flex flex-col items-center gap-1.5 active:scale-95 transition-transform shrink-0">
-            <div className="bg-amber-50 rounded-full p-2.5 text-amber-500">
-              <Flashlight size={20} />
-            </div>
-            <span className="text-[10px] font-medium text-gray-500 whitespace-nowrap">Đèn flash</span>
-          </button>
-
-          <p className="text-sm text-gray-500 text-center leading-relaxed flex-1 px-4 pt-1">
+          <p className="text-sm text-gray-500 text-center leading-relaxed flex-1 pt-1">
             Dùng camera để quét QR cho mỗi kiện hàng
           </p>
 
