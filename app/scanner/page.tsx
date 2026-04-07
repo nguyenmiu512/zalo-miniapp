@@ -30,6 +30,11 @@ const USE_CASES = [
     label: "Quét QR liên kết",
     desc: "Quét QR gốc → popup yêu cầu quét nguyên liệu",
   },
+  {
+    id: "final",
+    label: "Scan QR final",
+    desc: "Chế độ quét thực tế — không mô phỏng",
+  },
 ];
 
 // Mock product for simulation
@@ -222,7 +227,7 @@ function ScannerContent() {
         </div>
 
         {/* Simulate buttons */}
-        {useCase === "linked" ? (
+        {useCase === "final" ? null : useCase === "linked" ? (
           <div className="mt-2 flex flex-col gap-2">
             <button
               onClick={() => handleLinkedStep1("success")}
