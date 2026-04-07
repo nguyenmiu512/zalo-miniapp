@@ -145,7 +145,7 @@ function DetailSheet({
                   </button>
                   <button
                     onClick={() => { onRevoke(record); onClose(); }}
-                    className="w-full flex items-center justify-center gap-2 h-10 text-red-500 hover:text-red-600 text-sm font-semibold transition-colors"
+                    className="w-full flex items-center justify-center gap-2 h-12 rounded-xl border border-red-200 bg-white hover:bg-red-50 text-red-500 text-sm font-semibold transition-colors"
                   >
                     <Undo2 size={15} />
                     Thu hồi
@@ -159,7 +159,7 @@ function DetailSheet({
                   </div>
                   <button
                     onClick={() => { onRevoke(record); onClose(); }}
-                    className="w-full flex items-center justify-center gap-2 h-10 text-red-500 hover:text-red-600 text-sm font-semibold transition-colors"
+                    className="w-full flex items-center justify-center gap-2 h-12 rounded-xl border border-red-200 bg-white hover:bg-red-50 text-red-500 text-sm font-semibold transition-colors"
                   >
                     <Undo2 size={15} />
                     Thu hồi
@@ -330,7 +330,7 @@ export default function HistoryPage() {
             </button>
             <button
               onClick={handleRevokeAll}
-              className="flex-1 flex items-center justify-center gap-2 h-12 text-red-500 hover:text-red-600 text-sm font-semibold transition-colors "
+              className="flex-1 flex items-center justify-center gap-2 h-12 rounded-xl border border-red-200 bg-white hover:bg-red-50 text-red-500 text-sm font-semibold transition-colors"
             >
               <Undo2 size={16} />
               Thu hồi
