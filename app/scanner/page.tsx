@@ -6,7 +6,8 @@ import Link from "next/link";
 import { QrViewfinder } from "@/components/qr-viewfinder";
 import { useToast } from "@/components/toast-context";
 import { useHistory } from "@/components/history-context";
-import { Flashlight, ImageIcon, ChevronDown, Check, Clock, Link2, ScanLine } from "lucide-react";
+import { Flashlight, ImageIcon, ChevronDown, Check, Clock, Link2, ScanLine, MoreHorizontal, X } from "lucide-react";
+import { useAuth } from "@/components/auth-context";
 
 const USE_CASES = [
   {
@@ -51,7 +52,13 @@ function ScannerContent() {
   const [linkedOutcome, setLinkedOutcome] = useState<"success" | "fail">("success");
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const selected = USE_CASES.find((c) => c.id === useCase)!;
+  const { logout } = useAuth();
+  const selected = USE_CASES.find((c) => c.id === useCase)!
+
+  const handleClose = () => {
+    logout();
+    router.replace("/login");
+  };;
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -109,15 +116,33 @@ function ScannerContent() {
       <div className="h-11 bg-white" />
 
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-        <h1 className="text-base font-semibold text-gray-900">Quét mã QR</h1>
-        <Link
-          href="/scanner/history"
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
-        >
-          <Clock size={13} className="text-gray-600" />
-          <span className="text-xs font-semibold text-gray-700">Lịch sử</span>
-        </Link>
+      <div className="flex items-center justify-between px-4 py-2.5 border-b border-gray-100">
+        {/* Logo left */}
+        <img src="/logo.svg" alt="PILA" className="h-7 w-auto object-contain" />
+
+        {/* Right actions */}
+        <div className="flex items-center gap-1">
+          <Link
+            href="/scanner/history"
+            className="flex items-center gap-1 px-2.5 py-1.5 rounded-full hover:bg-gray-100 transition-colors"
+          >
+            <Clock size={13} className="text-gray-500" />
+            <span className="text-xs font-medium text-gray-600">Lịch sử</span>
+          </Link>
+          <button
+            className="p-2 rounded-full hover:bg-gray-100 transition-colors text-gray-500"
+            aria-label="Thêm"
+          >
+            <MoreHorizontal size={20} />
+          </button>
+          <button
+            onClick={handleClose}
+            className="p-2 rounded-full hover:bg-gray-100 transition-colors text-gray-500"
+            aria-label="Đóng"
+          >
+            <X size={20} />
+          </button>
+        </div>
       </div>
 
       <div className="px-4 pt-3 pb-safe-5 flex flex-col gap-4">
