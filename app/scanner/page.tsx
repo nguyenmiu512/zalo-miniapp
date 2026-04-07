@@ -51,6 +51,7 @@ function ScannerContent() {
   const [showLinkedPopup, setShowLinkedPopup] = useState(false);
   const [linkedOutcome, setLinkedOutcome] = useState<"success" | "fail">("success");
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { logout } = useAuth();
   const selected = USE_CASES.find((c) => c.id === useCase)!
@@ -202,7 +203,17 @@ function ScannerContent() {
           <p className="text-sm text-gray-500 text-center leading-relaxed">
             Dùng camera để quét QR cho mỗi kiện hàng
           </p>
-          <button className="flex flex-col items-center gap-1.5 active:scale-95 transition-transform">
+          {/* Hidden file input */}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx"
+            className="hidden"
+          />
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            className="flex flex-col items-center gap-1.5 active:scale-95 transition-transform"
+          >
             <div className="bg-blue-50 rounded-full p-2.5 text-blue-500">
               <ImageIcon size={20} />
             </div>
