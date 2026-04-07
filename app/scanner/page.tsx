@@ -117,20 +117,29 @@ function ScannerContent() {
 
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-2.5 border-b border-gray-100">
-        {/* Logo left */}
-        <img src="/logo.svg" alt="PILA" className="h-7 w-auto object-contain" />
+        {/* Logo left — fixed height, never grows */}
+        <img
+          src="/logo.svg"
+          alt="PILA"
+          style={{ height: 28, width: "auto", maxWidth: 140, flexShrink: 0 }}
+          className="object-contain"
+        />
 
-        {/* More + Close in pill border */}
-        <div className="inline-flex items-center w-fit border border-gray-200 rounded-[1000px] divide-x divide-gray-200 overflow-hidden">
+        {/* More + Close pill — tight fit, never grows */}
+        <div
+          style={{ flexShrink: 0 }}
+          className="flex items-center border border-gray-200 rounded-[1000px] overflow-hidden"
+        >
           <button
-            className="px-3 py-1.5 hover:bg-gray-50 rounded-l-[1000px] transition-colors text-gray-500"
+            className="flex items-center justify-center px-3 py-2 hover:bg-gray-50 transition-colors text-gray-500"
             aria-label="Thêm"
           >
             <MoreHorizontal size={18} />
           </button>
+          <div className="w-px self-stretch bg-gray-200" />
           <button
             onClick={handleClose}
-            className="px-3 py-1.5 hover:bg-gray-50 rounded-r-[1000px] transition-colors text-gray-500"
+            className="flex items-center justify-center px-3 py-2 hover:bg-gray-50 transition-colors text-gray-500"
             aria-label="Đóng"
           >
             <X size={18} />
