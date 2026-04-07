@@ -197,13 +197,12 @@ function ScannerContent() {
           <QrViewfinder />
         </div>
 
-        {/* Library + hint */}
-        <div className="flex justify-between items-start px-1">
-          <p className="text-sm text-gray-500 text-center leading-relaxed flex-1 pt-1">
+        {/* Hint + Library */}
+        <div className="flex flex-col items-center gap-3 px-1">
+          <p className="text-sm text-gray-500 text-center leading-relaxed">
             Dùng camera để quét QR cho mỗi kiện hàng
           </p>
-
-          <button className="flex flex-col items-center gap-1.5 active:scale-95 transition-transform shrink-0">
+          <button className="flex flex-col items-center gap-1.5 active:scale-95 transition-transform">
             <div className="bg-blue-50 rounded-full p-2.5 text-blue-500">
               <ImageIcon size={20} />
             </div>
