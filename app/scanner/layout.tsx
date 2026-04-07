@@ -24,7 +24,7 @@ function BottomNav() {
   ] as const;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-gray-100 flex">
+    <div className="shrink-0 bg-white border-t border-gray-100 flex">
       {tabs.map(({ href, icon: Icon, label, active }) => (
         <Link
           key={href}
@@ -55,8 +55,12 @@ export default function ScannerLayout({ children }: { children: React.ReactNode 
     <HistoryProvider>
       <ToastProvider>
         <ToastRenderer />
-        {children}
-        <BottomNav />
+        <div className="flex flex-col h-screen">
+          <div className="flex-1 min-h-0 overflow-hidden">
+            {children}
+          </div>
+          <BottomNav />
+        </div>
       </ToastProvider>
     </HistoryProvider>
   );

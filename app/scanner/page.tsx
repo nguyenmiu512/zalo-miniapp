@@ -112,7 +112,7 @@ function ScannerContent() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex flex-col h-full bg-white">
       {/* Status bar */}
       <div className="h-11 bg-white" />
 
@@ -148,7 +148,7 @@ function ScannerContent() {
         </div>
       </div>
 
-      <div className="px-4 pt-3 pb-24 flex flex-col gap-4">
+      <div className="flex-1 overflow-y-auto px-4 pt-3 pb-4 flex flex-col gap-4">
 
         {/* Use case dropdown */}
         <div ref={dropdownRef} className="relative">
