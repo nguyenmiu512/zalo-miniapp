@@ -6,7 +6,7 @@ import Link from "next/link";
 import { QrViewfinder } from "@/components/qr-viewfinder";
 import { useToast } from "@/components/toast-context";
 import { useHistory } from "@/components/history-context";
-import { Flashlight, ImageIcon, ChevronDown, Check, Clock, Link2, ScanLine, MoreHorizontal, X } from "lucide-react";
+import { Flashlight, ImageIcon, ChevronDown, Check, Link2, ScanLine, MoreHorizontal, X } from "lucide-react";
 import { useAuth } from "@/components/auth-context";
 
 const USE_CASES = [
@@ -120,32 +120,25 @@ function ScannerContent() {
         {/* Logo left */}
         <img src="/logo.svg" alt="PILA" className="h-7 w-auto object-contain" />
 
-        {/* Right actions */}
-        <div className="flex items-center gap-1">
-          <Link
-            href="/scanner/history"
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-full hover:bg-gray-100 transition-colors"
-          >
-            <Clock size={13} className="text-gray-500" />
-            <span className="text-xs font-medium text-gray-600">Lịch sử</span>
-          </Link>
+        {/* More + Close in pill border */}
+        <div className="flex items-center border border-gray-200 rounded-[1000px] divide-x divide-gray-200">
           <button
-            className="p-2 rounded-full hover:bg-gray-100 transition-colors text-gray-500"
+            className="px-3 py-1.5 hover:bg-gray-50 rounded-l-[1000px] transition-colors text-gray-500"
             aria-label="Thêm"
           >
-            <MoreHorizontal size={20} />
+            <MoreHorizontal size={18} />
           </button>
           <button
             onClick={handleClose}
-            className="p-2 rounded-full hover:bg-gray-100 transition-colors text-gray-500"
+            className="px-3 py-1.5 hover:bg-gray-50 rounded-r-[1000px] transition-colors text-gray-500"
             aria-label="Đóng"
           >
-            <X size={20} />
+            <X size={18} />
           </button>
         </div>
       </div>
 
-      <div className="px-4 pt-3 pb-safe-5 flex flex-col gap-4">
+      <div className="px-4 pt-3 pb-24 flex flex-col gap-4">
 
         {/* Use case dropdown */}
         <div ref={dropdownRef} className="relative">

@@ -1,15 +1,44 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import Link from "next/link";
 import { ToastProvider, useToast } from "@/components/toast-context";
 import { HistoryProvider } from "@/components/history-context";
 import { SuccessToast } from "@/components/success-toast";
 import { useAuth } from "@/components/auth-context";
+import { QrCode, Clock } from "lucide-react";
 
 function ToastRenderer() {
   const { toasts, dismissToast } = useToast();
   return <SuccessToast toasts={toasts} onDismiss={dismissToast} duration={5000} />;
+}
+
+function BottomNav() {
+  const pathname = usePathname();
+  const isHistory = pathname.startsWith("/scanner/history");
+
+  const tabs = [
+    { href: "/scanner", icon: QrCode, label: "Quét QR", active: !isHistory },
+    { href: "/scanner/history", icon: Clock, label: "Lịch sử", active: isHistory },
+  ] as const;
+
+  return (
+    <div className="fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-gray-100 flex">
+      {tabs.map(({ href, icon: Icon, label, active }) => (
+        <Link
+          key={href}
+          href={href}
+          className={`flex-1 flex flex-col items-center gap-1 py-3 transition-colors ${
+            active ? "text-blue-600" : "text-gray-400 hover:text-gray-600"
+          }`}
+        >
+          <Icon size={22} strokeWidth={active ? 2.5 : 1.8} />
+          <span className="text-[10px] font-medium">{label}</span>
+        </Link>
+      ))}
+    </div>
+  );
 }
 
 export default function ScannerLayout({ children }: { children: React.ReactNode }) {
@@ -27,6 +56,7 @@ export default function ScannerLayout({ children }: { children: React.ReactNode 
       <ToastProvider>
         <ToastRenderer />
         {children}
+        <BottomNav />
       </ToastProvider>
     </HistoryProvider>
   );

@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { ChevronLeft, RotateCcw, X, CheckCircle2, FileX, Undo2 } from "lucide-react";
+import { RotateCcw, X, CheckCircle2, FileX, Undo2 } from "lucide-react";
 import { useHistory, type HistoryRecord } from "@/components/history-context";
 import { useToast } from "@/components/toast-context";
 
@@ -166,7 +165,6 @@ function DetailSheet({
 
 // ── Main page ─────────────────────────────────────────────────────────────────
 export default function HistoryPage() {
-  const router = useRouter();
   const { records, syncRecord, syncMultiple, removeRecord, removeAll } = useHistory();
   const { addToast } = useToast();
 
@@ -221,10 +219,7 @@ export default function HistoryPage() {
 
       {/* Header */}
       <div className="bg-white border-b border-gray-100 shrink-0">
-        <div className="flex items-center gap-2 px-3 pb-3">
-          <button onClick={() => router.back()} className="p-1.5 rounded-full hover:bg-gray-100 transition-colors">
-            <ChevronLeft size={22} className="text-gray-700" />
-          </button>
+        <div className="px-4 pb-3 pt-1">
           <h1 className="text-base font-semibold text-gray-900">Lịch sử</h1>
         </div>
       </div>
@@ -259,7 +254,7 @@ export default function HistoryPage() {
       </div>
 
       {/* List */}
-      <div className={`flex-1 overflow-y-auto ${tab === "draft" && draftList.length > 0 ? "pb-24" : "pb-4"}`}>
+      <div className={`flex-1 overflow-y-auto ${tab === "draft" && draftList.length > 0 ? "pb-40" : "pb-20"}`}>
         {groups.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full gap-3 text-gray-400">
             <FileX size={40} strokeWidth={1.5} />
@@ -281,7 +276,7 @@ export default function HistoryPage() {
 
       {/* Bottom actions — Nháp tab only */}
       {tab === "draft" && draftList.length > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-4 pt-3 pb-safe-4 shadow-lg">
+        <div className="fixed bottom-[57px] left-0 right-0 bg-white border-t border-gray-100 px-4 pt-3 pb-3 shadow-lg">
           <div className="flex gap-3">
             <button
               onClick={handleReRecordAll}
