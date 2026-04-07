@@ -24,7 +24,10 @@ function BottomNav() {
   ] as const;
 
   return (
-    <div className="shrink-0 bg-white flex" style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}>
+    <div
+      className="fixed bottom-0 left-0 right-0 z-30 bg-white flex"
+      style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
+    >
       {tabs.map(({ href, icon: Icon, label, active }) => (
         <Link
           key={href}
@@ -57,12 +60,8 @@ export default function ScannerLayout({ children }: { children: React.ReactNode 
     <HistoryProvider>
       <ToastProvider>
         <ToastRenderer />
-        <div className="flex flex-col h-screen overflow-hidden">
-          <div className="flex-1 min-h-0 overflow-hidden">
-            {children}
-          </div>
-          <BottomNav />
-        </div>
+        {children}
+        <BottomNav />
       </ToastProvider>
     </HistoryProvider>
   );

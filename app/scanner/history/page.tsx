@@ -230,7 +230,7 @@ export default function HistoryPage() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-gray-50 overflow-hidden">
+    <div className="flex flex-col min-h-screen bg-gray-50">
 
       {/* Status bar */}
       <div className="h-11 bg-white shrink-0" />
@@ -297,7 +297,7 @@ export default function HistoryPage() {
       </div>
 
       {/* List */}
-      <div className="flex-1 overflow-y-auto pb-4">
+      <div className="flex-1 overflow-y-auto pb-24">
         {groups.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full gap-3 text-gray-400">
             <FileX size={40} strokeWidth={1.5} />
@@ -319,7 +319,7 @@ export default function HistoryPage() {
 
       {/* Bottom actions — Nháp tab only */}
       {tab === "draft" && draftList.length > 0 && (
-        <div className="shrink-0 bg-white border-t border-gray-100 px-4 pt-3 pb-3 shadow-lg">
+        <div className="fixed bottom-[57px] left-0 right-0 bg-white border-t border-gray-100 px-4 pt-3 pb-3 z-20 shadow-lg">
           <div className="flex gap-3">
             <button
               onClick={handleReRecordAll}
