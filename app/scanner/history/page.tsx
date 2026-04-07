@@ -152,9 +152,18 @@ function DetailSheet({
                   </button>
                 </div>
               ) : (
-                <div className="flex items-center justify-center gap-2 py-3 text-green-600 text-sm font-medium">
-                  <CheckCircle2 size={16} />
-                  Đã ghi nhận thành công
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center justify-center gap-2 py-3 text-green-600 text-sm font-medium">
+                    <CheckCircle2 size={16} />
+                    Đã ghi nhận thành công
+                  </div>
+                  <button
+                    onClick={() => { onRevoke(record); onClose(); }}
+                    className="w-full flex items-center justify-center gap-2 h-10 text-red-500 hover:text-red-600 text-sm font-semibold transition-colors"
+                  >
+                    <Undo2 size={15} />
+                    Thu hồi
+                  </button>
                 </div>
               )}
             </div>
