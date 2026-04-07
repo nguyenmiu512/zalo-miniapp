@@ -26,7 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="vi">
       <body className={`${inter.variable} font-sans bg-gray-100 min-h-screen`}>
         <AuthProvider>
-          <div className="w-full max-w-[390px] mx-auto bg-white min-h-screen relative overflow-x-hidden md:shadow-xl">
+          <div className="w-full max-w-[640px] mx-auto bg-white min-h-screen relative overflow-x-hidden md:shadow-xl">
             {children}
           </div>
         </AuthProvider>
