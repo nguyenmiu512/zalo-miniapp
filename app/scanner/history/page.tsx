@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { RotateCcw, X, CheckCircle2, FileX, Undo2, MoreHorizontal } from "lucide-react";
+import { RotateCcw, X, CheckCircle2, FileX, Undo2, Trash2, MoreHorizontal } from "lucide-react";
 import { useHistory, type HistoryRecord } from "@/components/history-context";
 import { useToast } from "@/components/toast-context";
 import { useAuth } from "@/components/auth-context";
@@ -147,8 +147,8 @@ function DetailSheet({
                     onClick={() => { onRevoke(record); onClose(); }}
                     className="w-full flex items-center justify-center gap-2 h-12 rounded-xl border border-red-200 bg-white hover:bg-red-50 text-red-500 text-sm font-semibold transition-colors"
                   >
-                    <Undo2 size={15} />
-                    Thu hồi
+                    <Trash2 size={15} />
+                    Xoá
                   </button>
                 </div>
               ) : (
@@ -332,8 +332,8 @@ export default function HistoryPage() {
               onClick={handleRevokeAll}
               className="flex-1 flex items-center justify-center gap-2 h-12 rounded-xl border border-red-200 bg-white hover:bg-red-50 text-red-500 text-sm font-semibold transition-colors"
             >
-              <Undo2 size={16} />
-              Thu hồi
+              <Trash2 size={16} />
+              Xoá
             </button>
           </div>
         </div>
