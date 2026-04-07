@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { RotateCcw, X, CheckCircle2, FileX, Undo2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { RotateCcw, X, CheckCircle2, FileX, Undo2, MoreHorizontal } from "lucide-react";
 import { useHistory, type HistoryRecord } from "@/components/history-context";
 import { useToast } from "@/components/toast-context";
+import { useAuth } from "@/components/auth-context";
 
 // ── Date helpers ─────────────────────────────────────────────────────────────
 function isSameDay(a: Date, b: Date) {
@@ -165,7 +167,14 @@ function DetailSheet({
 
 // ── Main page ─────────────────────────────────────────────────────────────────
 export default function HistoryPage() {
+  const router = useRouter();
+  const { logout } = useAuth();
   const { records, syncRecord, syncMultiple, removeRecord, removeAll } = useHistory();
+
+  const handleClose = () => {
+    logout();
+    router.replace("/login");
+  };
   const { addToast } = useToast();
 
   const [tab, setTab] = useState<"success" | "draft">("success");
@@ -218,9 +227,34 @@ export default function HistoryPage() {
       <div className="h-11 bg-white shrink-0" />
 
       {/* Header */}
-      <div className="bg-white border-b border-gray-100 shrink-0">
-        <div className="px-4 pb-3 pt-1">
-          <h1 className="text-base font-semibold text-gray-900">Lịch sử</h1>
+      <div className="bg-white border-b border-gray-100 shrink-0 flex items-center justify-between px-4 py-2.5">
+        {/* Logo left */}
+        <img
+          src="/logo.svg"
+          alt="PILA"
+          style={{ height: 28, width: "auto", maxWidth: 140, flexShrink: 0 }}
+          className="object-contain"
+        />
+
+        {/* More + Close pill */}
+        <div
+          style={{ flexShrink: 0 }}
+          className="flex items-center border border-gray-200 rounded-[1000px] overflow-hidden"
+        >
+          <button
+            className="flex items-center justify-center px-3 py-2 hover:bg-gray-50 transition-colors text-gray-500"
+            aria-label="Thêm"
+          >
+            <MoreHorizontal size={18} />
+          </button>
+          <div className="w-px self-stretch bg-gray-200" />
+          <button
+            onClick={handleClose}
+            className="flex items-center justify-center px-3 py-2 hover:bg-gray-50 transition-colors text-gray-500"
+            aria-label="Đóng"
+          >
+            <X size={18} />
+          </button>
         </div>
       </div>
 
