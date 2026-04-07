@@ -57,7 +57,7 @@ export default function ScannerLayout({ children }: { children: React.ReactNode 
     <HistoryProvider>
       <ToastProvider>
         <ToastRenderer />
-        <div className="flex flex-col h-screen">
+        <div className="flex flex-col h-screen overflow-hidden">
           <div className="flex-1 min-h-0 overflow-hidden">
             {children}
           </div>
