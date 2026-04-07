@@ -121,7 +121,7 @@ function ScannerContent() {
         <img src="/logo.svg" alt="PILA" className="h-7 w-auto object-contain" />
 
         {/* More + Close in pill border */}
-        <div className="flex items-center border border-gray-200 rounded-[1000px] divide-x divide-gray-200">
+        <div className="inline-flex items-center w-fit border border-gray-200 rounded-[1000px] divide-x divide-gray-200 overflow-hidden">
           <button
             className="px-3 py-1.5 hover:bg-gray-50 rounded-l-[1000px] transition-colors text-gray-500"
             aria-label="Thêm"
